@@ -108,11 +108,15 @@ android {
 }
 
 dependencies {
+    implementation(Deps.Libs.Android.constraintLayout)
     implementation(Deps.Libs.Android.appCompat)
     implementation(Deps.Libs.Android.material)
     implementation(Deps.Libs.Android.recyclerView)
     implementation(Deps.Libs.Android.swipeRefreshLayout)
     implementation(Deps.Libs.Android.mokoMvvmDataBinding)
+
+    implementation(Deps.Libs.Android.navigationFragment)
+    implementation(Deps.Libs.Android.navigationUI)
 
     implementation(platform(Deps.Libs.Android.firebaseBom))
     implementation(Deps.Libs.Android.firebaseCrashlytics)

@@ -7,10 +7,13 @@ package org.example.library.feature.auth.di
 import dev.icerock.moko.mvvm.dispatcher.EventsDispatcher
 import org.example.library.feature.auth.presentation.AuthViewModel
 
-class AuthFactory {
+class AuthFactory(
+    private val authRepository: AuthRepository
+) {
     fun createAuthViewModel(
         eventsDispatcher: EventsDispatcher<AuthViewModel.EventsListener>
     ) = AuthViewModel(
-        eventsDispatcher = eventsDispatcher
+        eventsDispatcher = eventsDispatcher,
+        authRepository = authRepository
     )
 }

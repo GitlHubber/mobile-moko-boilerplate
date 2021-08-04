@@ -22,6 +22,7 @@ import dev.icerock.moko.network.features.TokenFeature
 import dev.icerock.moko.network.generated.apis.NewsApi
 import dev.icerock.moko.resources.desc.StringDesc
 import dev.icerock.moko.resources.desc.desc
+import dev.icerock.moko.units.TableUnitItem
 import io.ktor.client.HttpClient
 import io.ktor.client.HttpClientConfig
 import io.ktor.client.engine.HttpClientEngine
@@ -31,23 +32,30 @@ import io.ktor.client.features.logging.Logging
 import io.ktor.http.HttpStatusCode
 import kotlinx.serialization.json.Json
 import org.example.library.feature.auth.di.AuthFactory
+import org.example.library.feature.listSample.di.ListSampleFactory
+import org.example.library.feature.listSample.di.ListSampleUnitFactory
+import org.example.library.feature.listSample.presentation.ListSampleViewModel
+import org.example.library.repositoryImpl.AuthRepositoryImpl
 
 class SharedFactory(
     settings: Settings,
     antilog: Antilog,
     baseUrl: String,
-    httpClientEngine: HttpClientEngine?
+    httpClientEngine: HttpClientEngine?,
+    unitsFactory: UnitsFactory
 ) {
     // special for iOS call side we not use argument with default value
     constructor(
         settings: Settings,
         antilog: Antilog,
         baseUrl: String,
+        unitsFactory: UnitsFactory
     ) : this(
         settings = settings,
         antilog = antilog,
         baseUrl = baseUrl,
-        httpClientEngine = null
+        httpClientEngine = null,
+        unitsFactory = unitsFactory
     )
 
     private val keyValueStorage: KeyValueStorage by lazy { KeyValueStorage(settings) }
@@ -105,7 +113,29 @@ class SharedFactory(
 
     // init factories here
     val authFactory: AuthFactory by lazy {
-        AuthFactory()
+        AuthFactory(
+            authRepository = AuthRepositoryImpl()
+        )
+    }
+
+    val listSampleFactory: ListSampleFactory by lazy {
+        ListSampleFactory(
+            unitsFactory = object : ListSampleUnitFactory {
+                override fun createSettingsUnit(
+                    id: Int,
+                    name: String,
+                    boolValue: Boolean,
+                    listener: ListSampleViewModel.EventsListener
+                ): TableUnitItem {
+                    return unitsFactory.createTile(
+                        id = id,
+                        title = name,
+                        bool = boolValue,
+                        listener = listener
+                    )
+                }
+            }
+        )
     }
 
     init {
@@ -121,5 +151,14 @@ class SharedFactory(
                 it.errors.firstOrNull()?.message?.desc()
                     ?: MR.strings.unknown_error.desc()
             }
+    }
+
+    interface UnitsFactory {
+        fun createTile(
+            id: Int,
+            title: String,
+            bool: Boolean,
+            listener: ListSampleViewModel.EventsListener
+        ): TableUnitItem
     }
 }

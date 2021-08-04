@@ -31,7 +31,8 @@ val mppLibs = listOf(
     Deps.Libs.MultiPlatform.mokoCrashReportingNapier
 )
 val mppModules = listOf(
-    Deps.Modules.Feature.auth
+    Deps.Modules.Feature.auth,
+    Deps.Modules.Feature.listSample
 )
 
 dependencies {

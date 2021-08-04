@@ -8,7 +8,9 @@ import android.app.Application
 import android.content.Context
 import com.github.aakira.napier.DebugAntilog
 import com.russhwolf.settings.AndroidSettings
+import dev.icerock.moko.units.TableUnitItem
 import org.example.library.SharedFactory
+import org.example.library.feature.listSample.presentation.ListSampleViewModel
 
 class MainApplication : Application() {
     override fun onCreate() {
@@ -22,7 +24,22 @@ class MainApplication : Application() {
         AppComponent.factory = SharedFactory(
             baseUrl = BuildConfig.BASE_URL,
             antilog = DebugAntilog(),
-            settings = AndroidSettings(getSharedPreferences("app", Context.MODE_PRIVATE))
+            settings = AndroidSettings(getSharedPreferences("app", Context.MODE_PRIVATE)),
+            unitsFactory = object : SharedFactory.UnitsFactory {
+                override fun createTile(
+                    id: Int,
+                    title: String,
+                    bool: Boolean,
+                    listener: ListSampleViewModel.EventsListener
+                ): TableUnitItem {
+                    return TileNews().apply {
+                        itemId = id.toLong()
+                        this.title = title
+                        this.isChecked = bool
+                        this.listener = listener
+                    }
+                }
+            }
         )
     }
 }

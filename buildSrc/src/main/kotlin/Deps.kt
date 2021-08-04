@@ -24,6 +24,7 @@ object Deps {
     private const val swipeRevealLayoutVersion = "1.4.1"
     private const val photoViewVersion = "2.3.0"
     private const val ucropVersion= "2.2.6"
+    private const val navVersion = "2.3.5"
 
     private const val googleServicesVersion = "4.3.4"
     private const val firebaseCrashlyticsVersion = "2.3.0"
@@ -155,6 +156,12 @@ object Deps {
              */
             const val inputMask =
                 "com.redmadrobot:input-mask-android:$inputMaskVersion"
+
+            const val navigationFragment =
+                "androidx.navigation:navigation-fragment-ktx:$navVersion"
+
+            const val navigationUI =
+                "androidx.navigation:navigation-ui-ktx:$navVersion"
             
             /** easy-to-use библиотека, позволяет добавить swipe-actions для элементов списка
                 (https://github.com/chthai64/SwipeRevealLayout)
@@ -275,6 +282,10 @@ object Deps {
         object Feature {
             val auth = MultiPlatformModule(
                 name = ":mpp-library:feature:auth",
+                exported = true
+            )
+            val listSample = MultiPlatformModule(
+                name = ":mpp-library:feature:listSample",
                 exported = true
             )
         }
