@@ -7,7 +7,7 @@ interface ListSampleUnitFactory {
     fun createSettingsUnit(
         id: Int,
         name: String,
-        boolValue: Boolean,
+        isChecked: Boolean,
         listener: ListSampleViewModel.EventsListener
     ): TableUnitItem
 }

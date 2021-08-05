@@ -8,12 +8,20 @@ class SplashScreenViewModel(
     override val eventsDispatcher: EventsDispatcher<EventsListener>
 ) : ViewModel(), EventsDispatcherOwner<SplashScreenViewModel.EventsListener> {
 
-    fun checkAuth() {
-        // TODO: Произвести проверку авторизованности, вызвать соответствующий переход
+    fun checkAuth(isEntered: Boolean) {
+        if (isEntered) {
+            eventsDispatcher.dispatchEvent {
+                routeToList()
+            }
+        } else {
+            eventsDispatcher.dispatchEvent {
+                routeToAuth()
+            }
+        }
     }
 
     interface EventsListener {
-        fun routeToMain()
+        fun routeToList()
         fun routeToAuth()
     }
 }

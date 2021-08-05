@@ -23,16 +23,13 @@ class ListSampleViewModel(
     data class SettingsItem(
         val id: Int,
         val name: String,
-        val boolValue: Boolean
+        val isChecked: Boolean
     )
 
     //Создаем тестовый список элементов
     private val _settingsData: MutableLiveData<List<SettingsItem>> = MutableLiveData(
         listOf(
-            SettingsItem(id = 1, name = "Param 1", boolValue = true),
-            SettingsItem(id = 2, name = "Param 2", boolValue = false),
-            SettingsItem(id = 3, name = "Param 3", boolValue = false),
-            SettingsItem(id = 4, name = "Param 4", boolValue = false)
+            SettingsItem(id = 1, name = "Param 1", isChecked = false)
         )
     )
 
@@ -48,7 +45,7 @@ class ListSampleViewModel(
         return unitFactory.createSettingsUnit(
             id = settings.id,
             name = settings.name,
-            boolValue = settings.boolValue,
+            isChecked = settings.isChecked,
             listener = object : EventsListener {
                 override fun onClick(boolValue: Boolean) {
                     onSettingChanges(settings, !boolValue)
@@ -61,18 +58,18 @@ class ListSampleViewModel(
     private fun onSettingChanges(changedSetting: SettingsItem, newValue: Boolean) {
         val newSettings = _settingsData.value.map { currentSetting ->
             if (currentSetting.id == changedSetting.id) {
-                currentSetting.copy(boolValue = newValue)
+                currentSetting.copy(isChecked = newValue)
             } else {
                 currentSetting
             }
         }
-        val trueSettings = newSettings.takeWhile { it.boolValue }
+        val trueSettings = newSettings.takeWhile { it.isChecked }
         val lastSettingId = (trueSettings.lastOrNull()?.id ?: 0) + 1
         val resultSettings = trueSettings.plusElement(
             SettingsItem(
                 lastSettingId,
                 "Param ${lastSettingId}",
-                boolValue = false
+                isChecked = false
             )
         )
         _settingsData.value = resultSettings

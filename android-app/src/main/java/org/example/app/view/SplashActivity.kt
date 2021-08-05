@@ -5,33 +5,63 @@
 package org.example.app.view
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
+import androidx.navigation.NavGraph
+import androidx.navigation.NavInflater
 import androidx.navigation.fragment.NavHostFragment
+import dev.icerock.moko.mvvm.MvvmActivity
+import dev.icerock.moko.mvvm.createViewModelFactory
+import dev.icerock.moko.mvvm.dispatcher.eventsDispatcherOnMain
+import org.example.app.BR
 import org.example.app.R
 import org.example.app.databinding.ActivitySplashBinding
+import org.example.app.utils.USER_AUTH_ENTERED_KEY
+import org.example.app.utils.getUserAuthorizedState
+import org.example.library.feature.auth.presentation.SplashScreenViewModel
 
-class SplashActivity : AppCompatActivity() {
+class SplashActivity: MvvmActivity<ActivitySplashBinding, SplashScreenViewModel>(), SplashScreenViewModel.EventsListener {
 
     private lateinit var navController: NavController
-    private lateinit var binding: ActivitySplashBinding
+    private lateinit var host: NavHostFragment
+    private lateinit var graphInflater: NavInflater
+    private lateinit var navGraph: NavGraph
+
+    override val layoutId: Int = R.layout.activity_splash
+    override val viewModelVariableId: Int = BR.viewModel
+    override val viewModelClass: Class<SplashScreenViewModel> = SplashScreenViewModel::class.java
+
+    override fun viewModelFactory(): ViewModelProvider.Factory {
+        return createViewModelFactory { SplashScreenViewModel(eventsDispatcherOnMain()) }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivitySplashBinding.inflate(LayoutInflater.from(this))
-        setContentView(binding.root)
-        initNavController()
-    }
 
-    override fun onPostResume() {
-        super.onPostResume()
-        // impl routing here
+        viewModel.eventsDispatcher.bind(
+            lifecycleOwner = this,
+            listener = this
+        )
+
+        viewModel.checkAuth(getUserAuthorizedState(USER_AUTH_ENTERED_KEY, false))
     }
 
     private fun initNavController() {
-        val host =
-            supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
+        host = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
+        graphInflater = host.navController.navInflater
         navController = host.navController
+        navGraph = graphInflater.inflate(R.navigation.root_navigation)
+    }
+
+    override fun routeToList() {
+        initNavController()
+        navGraph.startDestination = R.id.listSample
+        navController.graph = navGraph
+    }
+
+    override fun routeToAuth() {
+        initNavController()
+        navGraph.startDestination = R.id.auth
+        navController.graph = navGraph
     }
 }

@@ -29,13 +29,13 @@ class MainApplication : Application() {
                 override fun createTile(
                     id: Int,
                     title: String,
-                    bool: Boolean,
+                    isChecked: Boolean,
                     listener: ListSampleViewModel.EventsListener
                 ): TableUnitItem {
-                    return TileNews().apply {
+                    return TileSwitches().apply {
                         itemId = id.toLong()
                         this.title = title
-                        this.isChecked = bool
+                        this.isChecked = isChecked
                         this.listener = listener
                     }
                 }

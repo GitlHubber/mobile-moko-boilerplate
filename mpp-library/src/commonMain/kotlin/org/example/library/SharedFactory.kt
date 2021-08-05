@@ -124,13 +124,13 @@ class SharedFactory(
                 override fun createSettingsUnit(
                     id: Int,
                     name: String,
-                    boolValue: Boolean,
+                    isChecked: Boolean,
                     listener: ListSampleViewModel.EventsListener
                 ): TableUnitItem {
                     return unitsFactory.createTile(
                         id = id,
                         title = name,
-                        bool = boolValue,
+                        isChecked = isChecked,
                         listener = listener
                     )
                 }
@@ -157,7 +157,7 @@ class SharedFactory(
         fun createTile(
             id: Int,
             title: String,
-            bool: Boolean,
+            isChecked: Boolean,
             listener: ListSampleViewModel.EventsListener
         ): TableUnitItem
     }

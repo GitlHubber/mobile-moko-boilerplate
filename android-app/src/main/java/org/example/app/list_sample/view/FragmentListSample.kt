@@ -6,15 +6,11 @@ import androidx.lifecycle.ViewModelProvider
 import dev.icerock.moko.mvvm.MvvmEventsFragment
 import dev.icerock.moko.mvvm.ViewModelFactory
 import dev.icerock.moko.mvvm.dispatcher.eventsDispatcherOnMain
-import dev.icerock.moko.units.TableUnitItem
 import dev.icerock.moko.units.adapter.UnitsRecyclerViewAdapter
 import org.example.app.AppComponent
 import org.example.app.BR
 import org.example.app.R
-import org.example.app.TileNews
 import org.example.app.databinding.FragmentListSampleBinding
-import org.example.app.databinding.TileNewsBinding
-import org.example.library.feature.listSample.di.ListSampleUnitFactory
 import org.example.library.feature.listSample.presentation.ListSampleViewModel
 
 class FragmentListSample: MvvmEventsFragment<FragmentListSampleBinding, ListSampleViewModel, ListSampleViewModel.EventsListener>() {
